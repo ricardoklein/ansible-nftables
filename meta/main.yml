@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: nftables
   author: Ricardo Klein
   description: Setup nftables on your host
   company: N/A
