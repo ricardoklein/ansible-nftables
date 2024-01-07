@@ -1,0 +1,20 @@
+[Unit]
+Description=nftables
+Documentation=man:nft(8) http://wiki.nftables.org
+Wants=network-online.target
+After=network-online.target
+#DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StandardInput=null
+ProtectSystem=full
+ProtectHome=true
+ExecStart=/usr/local/sbin/nftables-service start
+ExecReload=/usr/local/sbin/nftables-service reload
+ExecStop=/usr/local/sbin/nftables-service stop
+ReadWriteDirectories=/var/lib/nftables/
+
+[Install]
+WantedBy=sysinit.target

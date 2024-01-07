@@ -1,0 +1,94 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+# VARS
+# Example:
+#   define external          = "eth0"
+#   define ssh_allowed_hosts = { 192.168.0.1, 172.16.10.10 }
+{{ nft_vars }}
+
+table inet filter {
+  chain input {
+    type filter hook input priority 0;
+    policy drop;
+
+    # Allow traffic from established and related packets.
+    ct state established,related accept;
+
+    # Drop invalid packets.
+    ct state invalid drop;
+
+    # Allow loopback traffic.
+    iifname lo accept;
+
+    # Input rules
+    # Examples:
+    #   ip saddr 45.33.24.162  accept; #VPN - gate.tibox.com.br
+    #   tcp dport 80   accept;
+    {{ nft_filter_input | indent( width=4 ) }}
+
+    # Uncomment to enable logging of denied inbound traffic
+    # log prefix "[nftables] Inbound Denied: " flags all counter drop
+    counter reject;
+  }
+
+  chain forward {
+    type filter hook forward priority 0;
+    policy drop;
+
+    ct state established,related accept;
+
+    # Drop invalid packets.
+    ct state invalid drop;
+
+    # Examples:
+    #   ip protocol icmp limit rate 20/second accept;
+    #   ip6 nexthdr ipv6-icmp limit rate 20/second accept;
+    #   iifname $int_if oifname $ext_if counter accept;
+    {%- if nft_filter_forward is defined %}
+    {{ nft_filter_forward | indent( width=4 ) }}
+    {%- endif %}
+
+    counter log reject;
+  }
+
+}
+
+table ip nat {
+
+  chain output {
+    type nat hook output priority 0;
+    # Examples:
+    #   ip daddr 127.0.0.1 tcp dport 80  redirect to 8080;
+    #   ip daddr 127.0.0.1 tcp dport 443 redirect to 8443;
+    {% if nft_nat_output is defined %}
+    {{ nft_nat_output | indent( width=4 ) }}
+    {% endif %}
+
+  }
+
+  chain prerouting {
+    type nat hook prerouting priority -100;
+    # Examples:
+    #   tcp dport 80  redirect to :8080;
+    #   tcp dport 443 redirect to :8443;
+    {% if nft_nat_prerouting is defined %}
+    {{ nft_nat_prerouting | indent( width=4 ) }}
+    {% endif %}
+
+  }
+
+  chain postrouting {
+     type nat hook postrouting priority 100;
+     policy accept;
+     # Examples:
+     #   iifname cni-podman0 oif $external   counter masquerade random,persistent;
+     #   iifname cni-podman0 oif $wireguard  counter masquerade random,persistent;
+     {% if nft_nat_postrouting is defined %}
+     {{ nft_nat_postrouting | indent( width=4 ) }}
+     {% endif %}
+
+  }
+}
+

@@ -1,0 +1,18 @@
+galaxy_info:
+  author: Ricardo Klein
+  description: Setup nftables on your host
+  company: N/A
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.9
+  platforms:
+  - name: opensuse
+    versions:
+      - "15.5"
+  - name: SLES
+    versions:
+      - "15"
+  galaxy_tags:
+    - nftables
+    - nft
+    - firewall
+dependencies: []
