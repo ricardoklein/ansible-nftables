@@ -1,5 +1,7 @@
 # ricardoklein.nftables
 
+[![Galaxy](https://img.shields.io/badge/galaxy-ricardoklein.nftables-blue.svg?style=flat)](https://galaxy.ansible.com/ui/standalone/roles/ricardoklein/nftables/documentation/)
+
 Install and setup nftables firewall on opensuse Leap.
 By default, we are also installing nftables-service, so the firewall
 is up and running with configs from /etc/nftables.conf
@@ -93,7 +95,9 @@ nft_nat_postrouting: |
 
 ## Dependencies
 
-No deps.
+This role uses the following collections:
+
+* community.general
 
 ## Example Playbook
 
