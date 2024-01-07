@@ -1,6 +1,3 @@
 ---
-# defaults file for ansible-wireguard
-nftables_sles_packages:
-  - nftables
-  - nftables-service
-
+# defaults file
+nftables_package: nftables_package

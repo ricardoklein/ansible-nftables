@@ -1,5 +1,9 @@
 ---
 # tasks file for ansible-wireguard
+- name: NFTABLES | Install nftables package
+  community.general.zypper:
+    name: "{{ nftables_package }}"
+    state: present
 - name: NFTABLES | Deploy nftables-service unit
   ansible.builtin.template:
     src:   nftables.service.j2
@@ -31,4 +35,3 @@
     name:  "nftables"
     enabled: yes
     daemon_reload: yes
-
