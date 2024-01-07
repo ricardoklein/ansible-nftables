@@ -46,9 +46,9 @@ table inet filter {
     #   ip protocol icmp limit rate 20/second accept;
     #   ip6 nexthdr ipv6-icmp limit rate 20/second accept;
     #   iifname $int_if oifname $ext_if counter accept;
-    {%- if nft_filter_forward is defined %}
+    {% if nft_filter_forward is defined %}
     {{ nft_filter_forward | indent( width=4 ) }}
-    {%- endif %}
+    {% endif %}
 
     counter log reject;
   }
