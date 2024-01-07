@@ -116,9 +116,6 @@ GPL
 If you want to suggest changes or request new features,
 please feel free to create a issue or send a pull request.
 
-If you find this useful, please donate Monero:
+If you find this useful, you can help donating Monero:
+
 `86srKqPRnzpLCkihCHJ9ZB8sjg7B1QxBmT7xS6ebsL52JgCSHVsDsTqDCAqQveasfGh95AZei11Dc1fwjwrE42t3QhzHkdm`
-
-## ToDo
-
-
