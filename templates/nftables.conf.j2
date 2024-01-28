@@ -57,38 +57,36 @@ table inet filter {
 
 table ip nat {
 
+{% if nft_nat_output is defined %}
   chain output {
     type nat hook output priority 0;
     # Examples:
     #   ip daddr 127.0.0.1 tcp dport 80  redirect to 8080;
     #   ip daddr 127.0.0.1 tcp dport 443 redirect to 8443;
-    {% if nft_nat_output is defined %}
     {{ nft_nat_output | indent( width=4 ) }}
-    {% endif %}
-
   }
+{% endif %}
 
+{% if nft_nat_prerouting is defined %}
   chain prerouting {
     type nat hook prerouting priority -100;
     # Examples:
     #   tcp dport 80  redirect to :8080;
     #   tcp dport 443 redirect to :8443;
-    {% if nft_nat_prerouting is defined %}
     {{ nft_nat_prerouting | indent( width=4 ) }}
-    {% endif %}
-
   }
+{% endif %}
 
+{% if nft_nat_postrouting is defined %}
   chain postrouting {
      type nat hook postrouting priority 100;
      policy accept;
      # Examples:
      #   iifname cni-podman0 oif $external   counter masquerade random,persistent;
      #   iifname cni-podman0 oif $wireguard  counter masquerade random,persistent;
-     {% if nft_nat_postrouting is defined %}
      {{ nft_nat_postrouting | indent( width=4 ) }}
-     {% endif %}
-
   }
+{% endif %}
+
 }
 
