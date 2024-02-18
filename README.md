@@ -41,9 +41,9 @@ nft_filter_forward: |
     iifname $podman_if   oifname $internal_if counter accept;
 
 nft_nat_postrouting: |
-    iifname $internal_if oif $external_if counter masquerade random,persistent;
-    iifname $podman_if   oif $external_if counter masquerade random,persistent;
-    iifname $podman_if   oif $internal_if counter masquerade random,persistent;
+    iifname $internal_if oifname $external_if counter masquerade random,persistent;
+    iifname $podman_if   oifname $external_if counter masquerade random,persistent;
+    iifname $podman_if   oifname $internal_if counter masquerade random,persistent;
 ```
 
 Same webserver, but running workloads in podman containers:
@@ -65,7 +65,7 @@ nft_filter_forward: |
     iifname $podman_if   oifname $external_if counter accept;
 
 nft_nat_postrouting: |
-    iifname $podman_if   oif $external_if counter masquerade random,persistent;
+    iifname $podman_if   oifname $external_if counter masquerade random,persistent;
 ```
 
 Virtualization host with internal network for the VMs on virbr0
@@ -90,7 +90,7 @@ nft_filter_forward: |
     iifname $external_if oifname $internal_if counter accept;
 
 nft_nat_postrouting: |
-    iifname $internal_if oif $external_if counter masquerade random,persistent;
+    iifname $internal_if oifname $external_if counter masquerade random,persistent;
 ```
 
 ## Dependencies
